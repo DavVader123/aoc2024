@@ -1,11 +1,8 @@
-use aoc2024::utils; 
  
-pub fn solve() {
-    let input = utils::get_input(1);
+pub fn solve(input: String) -> (usize,usize) {
     let part1 = solve_part1(input.clone());
     let part2 = solve_part2(input.clone());
-
-    println!("Solution for part 1: {}\nSolution for part 2: {}", part1, part2);
+    (part1,part2)
 }
 
 fn get_two_lists(input: String) -> (Vec<usize>, Vec<usize>) {
