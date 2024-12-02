@@ -50,5 +50,18 @@ fn solve_part1(input: String) -> usize {
 } 
  
 fn solve_part2(input: String) -> usize { 
-0 
+	let data = parse_input(input);
+	let mut sum: usize = 0;
+	let mut dampened: Vec<usize> = Vec::new();
+	for unsafe_report in data.iter().filter(|&report| {!is_safe((*report).clone())}) {
+		for pos in 0..unsafe_report.len() {
+			dampened = unsafe_report.iter().take(pos).chain(unsafe_report.iter().skip(pos+1)).map(|x| *x).collect();
+			if is_safe(dampened) {
+				sum += 1;
+				break;
+			}
+		}
+	}
+	sum += data.iter().filter(|&report| {is_safe((*report).clone())}).count();
+	sum
 } 
