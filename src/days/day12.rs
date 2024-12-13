@@ -60,13 +60,68 @@ fn calc_cost(map: &mut Vec<Vec<char>>, line: usize, column: usize) -> usize {
 	calc_area(map, line, column) * calc_perimeter(map)
 }
 
+fn value_part2(map: &mut Vec<Vec<char>>, line: usize, column: usize) -> usize {
+	let mut sum: usize = 0;
+	let up = line > 0 && map[line - 1][column] == '#';
+	let right = column < map[0].len() - 1 && map[line][column + 1] == '#';
+	let down = line < map.len() - 1 && map[line + 1][column] == '#';
+	let left = column > 0 && map[line][column - 1] == '#';
+	let upright = line > 0 && column < map[0].len()-1 && map[line - 1][column + 1] == '#';
+	let upleft = line > 0 && column > 0 && map[line - 1][column - 1] == '#';
+	let downright = line < map.len() - 1 && column < map[0].len()-1 && map[line + 1][column + 1] == '#';
+	let downleft = line < map.len() - 1 && column > 0 && map[line + 1][column - 1] == '#';
+	if up && down && !right && !left || right && left && !up && !down {
+		return 0;
+	}
+	if !left && !right && !up && !down {
+		return 4;
+	}
+	if up && !right && !left && !down || right && !up && !left && !down || down && !up && !left && !right || left && !up && !right && !down {
+		return 2;
+	}
+	if up && right {
+		if !upright {
+			sum += 1;
+		}
+		if !down && !left {
+			sum += 1;
+		}
+	}
+	if right && down {
+		if !downright {
+			sum += 1;
+		}
+		if !up && !left {
+			sum += 1;
+		}
+	}
+	if down && left {
+		if !downleft {
+			sum += 1;
+		}
+		if !up && !right {
+			sum += 1;
+		}
+	}
+	if left && up {
+		if !upleft {
+			sum += 1;
+		}
+		if !down && !right {
+			sum += 1;
+		}
+	}
+	sum
+}
+
 fn calc_perimeter_part2(map: &mut Vec<Vec<char>>) -> usize {
 	let mut sum: usize = 0;
-	let pos = map.iter().flatten().position(|c| *c == '#').unwrap();
-	let line = pos / map.len();
-	let column = pos % map.len();
-	while map[line][column] != '*' {
-		
+	for line in 0..map.len() {
+		for column in 0..map[0].len() {
+			if map[line][column] == '#' {
+				sum += value_part2(map, line, column);
+			}
+		}
 	}
 	map.iter_mut().flatten().filter(|c| **c == '#').for_each(|c| *c = '*');
 	sum
