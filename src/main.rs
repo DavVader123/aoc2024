@@ -8,7 +8,7 @@ use aoc2024::utils;
 
 fn main() {
     let day: u8 = Utc::now().date_naive().day() as u8;
-    let day = 13;
+    let day = 14;
     let day_solver = get_day_solver(day);
     let time = Instant::now();
     let (p1, p2) = day_solver(utils::get_input(day));
